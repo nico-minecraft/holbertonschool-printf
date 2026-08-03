@@ -1,1 +1,3 @@
-# holbertonschool-printf
+holbertonschool-printf
+
+README file for project about printing f
