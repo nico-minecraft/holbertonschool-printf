@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <limits.h>
 #include "main.h"
 
 /**
@@ -26,9 +27,14 @@ int main(void)
 	_printf("Just a percent: [%%]\n");
 	printf("Just a percent: [%%]\n");
 
+	_printf("Ints:[%d, %i, %d, %i]\n", 0, -762534, 1024, 98765);
+	printf("Ints:[%d, %i, %d, %i]\n", 0, -762534, 1024, 98765);
+
+	_printf("Extremes:[%d, %d]\n", INT_MIN, INT_MAX);
+	printf("Extremes:[%d, %d]\n", INT_MIN, INT_MAX);
+
 	_printf("No format at all\n");
 	printf("No format at all\n");
 
 	return (0);
 }
-
