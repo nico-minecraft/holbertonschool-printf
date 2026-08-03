@@ -1,66 +1,49 @@
-#include <unistd.h>
-#include <stdarg.h>
 #include "main.h"
 
 /**
- * _printf - Produces output according to a format, handling
- * the c, s, and %% conversion specifiers
- * @format: The format string containing zero or more directives
+ * _printf - produces output according to a format, handling the
+ * c, s and %% conversion specifiers
+ * @format: character string composed of zero or more directives
  *
- * Return: The number of characters printed (excluding the null byte),
- * or -1 if format is NULL
+ * Return: the number of characters printed (excluding the
+ * null byte), or -1 on failure
  */
 int _printf(const char *format, ...)
 {
-	printf_spec_t specifiers[] = {
-		{'c', print_char},
-		{'s', print_string},
-		{'%', print_percent},
-		{'\0', NULL}
-	};
 	va_list args;
-	int i, j, count, found;
+	int count;
+	int i;
+	int (*f)(va_list);
 
 	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
 	count = 0;
+	i = 0;
 
-	for (i = 0; format[i] != '\0'; i++)
+	while (format[i] != '\0')
 	{
 		if (format[i] != '%')
 		{
-			write(1, &format[i], 1);
-			count++;
-			continue;
-		}
-
-		found = 0;
-		for (j = 0; specifiers[j].spec != '\0'; j++)
-		{
-			if (format[i + 1] == specifiers[j].spec)
-			{
-				count += specifiers[j].f(args);
-				found = 1;
-				break;
-			}
-		}
-
-		if (found)
-		{
+			count += _putchar(format[i]);
 			i++;
 			continue;
 		}
 
-		write(1, &format[i], 1);
-		count++;
-		if (format[i + 1] != '\0')
+		i++;
+		if (format[i] == '\0')
+			break;
+
+		f = get_print_func(format[i]);
+		if (f != NULL)
+			count += f(args);
+		else
 		{
-			i++;
-			write(1, &format[i], 1);
-			count++;
+			count += _putchar('%');
+			count += _putchar(format[i]);
 		}
+		i++;
 	}
 
 	va_end(args);
